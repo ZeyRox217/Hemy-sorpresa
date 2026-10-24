@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+        }
+
+        h1 {
+            color: #d63447;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        p.subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .note-box {
+            background: #fff5f5;
+            border: 2px dashed #ff8787;
+            border-radius: 12px;
+            padding: 25px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #fa5252;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .counter {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Para mi princesa hermosa 💌</h1>
+        <p class="subtitle">Un frasquito con razones por las que eres mi persona favorita.</p>
+        
+        <div class="note-box" id="noteDisplay">
+            ¡Haz clic en el botón de abajo para sacar una nota! ✨
+        </div>
+
+        <button onclick="getRandomNote()">Saca una nota ❤️</button>
+        
+        <div class="counter" id="counterDisplay">Notes read: 0</div>
+    </div>
+
+    <script>
+        // Customize these with your own inside jokes and reasons!
+        const loveNotes = [
+            "Tienes la risa más adorable de todo el mundo.",
+            "Cuando te enojas por chat y me mandas el gatete nojao.",
+	    "Cuando te enojas y me dices 'hm' y me miras con esos ojos.",
+            "Tu dulzura y cálidez humana.",
+            "Tus besos arreglan, literalmente, el 100 % de mis días malos.",
+            "Todavía siento mariposas cuando pienso acerca de la primera vez que nos conocimos.",
+            "Tu determinación.",
+            "Nunca te rindes y sigues intentándolo",
+            "Te ves preciosa incluso cuando acabas de salir de la cama.",
+            "Me encantan nuestras conversaciones espontáneas a altas horas de la noche sobre absolutamente nada.",
+	    "Por tus ojos.",
+ 	    "Me escuchas sobre mis intereses (y vaya que hablo demasiado).",
+	    "Porque tu magia es no rendirte",
+	    "Te esfuerzas por expresar tu amor, incluso si te cuesta un poquito.",
+	    "La forma en la que hablas cuando estás cansada",
+	    "Por como me gimes (⸝⸝๑  ̫ ๑⸝⸝⸝)",
+	    "La forma en la que dices Zhi",
+	    "Sabes como hacerme reír",
+	    "La distancia física no nos separa emocionalmente",
+	    "No puedo dormir si no es contigo",
+ 	    "La forma en la que te ríes de tus propias bromas",
+	    "Porque sencillamente te amo. Te amo de acá a la luna ida y vuelta a pasos de tortuga, dummy.",
+	    "Porque eres muy linda",
+	    "Porque tenemos todo un futuro adelante juntos",
+        ];
+
+        let count = 0;
+        let lastIdx = -1;
+
+        function getRandomNote() {
+            const noteDisplay = document.getElementById("noteDisplay");
+            const counterDisplay = document.getElementById("counterDisplay");
+
+            // Pick a random index, ensuring it doesn't repeat the exact same note back-to-back
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * loveNotes.length);
+            } while (idx === lastIdx && loveNotes.length > 1);
+            
+            lastIdx = idx;
+
+            // Simple fade effect
+            noteDisplay.style.opacity = 0;
+            setTimeout(() => {
+                noteDisplay.innerText = loveNotes[idx];
+                noteDisplay.style.opacity = 1;
+            }, 150);
+
+            count++;
+            counterDisplay.innerText = `Notes read: ${count}`;
+        }
+    </script>
+</body>
+</html>

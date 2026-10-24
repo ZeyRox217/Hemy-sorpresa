@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una carta para mi princesa hermosa, linda y un poco impaciente 🐢</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffc0cb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 650px; /* Made wider for comfortable long-form reading */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title-text {
+            color: #b33939;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Envelope Initial State */
+        .envelope-container {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background-color: #f7d6d0;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.5s ease;
+        }
+
+        .envelope-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 120px solid #e8b4b8;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 3;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: #c0392b;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 4;
+            transition: transform 0.2s;
+        }
+
+        .wax-seal:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid #f2a6a6;
+            border-right: 160px solid #f2a6a6;
+            border-bottom: 110px solid #e89595;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            z-index: 2;
+        }
+
+        /* Long Letter Container (Hidden Initially) */
+        .letter-container {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background: #fffdf9; /* Classic warm paper color */
+            border-radius: 12px;
+            padding: 50px 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(30px);
+            pointer-events: none;
+            transition: all 0.8s ease-in-out;
+            max-height: 80vh; /* Keeps it contained on screen */
+            overflow-y: auto;  /* Allows smooth scrolling for very long text */
+        }
+
+        /* Scrollbar styling for the letter */
+        .letter-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .letter-container::-webkit-scrollbar-thumb {
+            background: #f2a6a6;
+            border-radius: 4px;
+        }
+
+        .letter-content {
+            color: #2c3e50;
+            font-size: 1.05rem;
+            line-height: 1.9; /* Generous line spacing for easy reading */
+            text-align: left;
+        }
+
+        .letter-content h2 {
+            color: #b33939;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-family: 'Georgia', serif;
+        }
+
+        .letter-content p {
+            margin-bottom: 20px; /* Space between paragraphs */
+        }
+
+        .signature {
+            margin-top: 30px;
+            text-align: right;
+            font-weight: bold;
+            color: #b33939;
+            font-style: italic;
+        }
+
+        /* Classes triggered when opened */
+        .wrapper.open .envelope-container {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .wrapper.open .letter-container {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper" id="appWrapper">
+        <div class="title-text" id="titleText">Haz clic en la luna para abrir tu carta, mi amor... ✉️</div>
+
+        <!-- The Envelope -->
+        <div class="envelope-container" onclick="openLetter()">
+            <div class="flap"></div>
+            <div class="wax-seal">🌙</div>
+            <div class="pocket"></div>
+        </div>
+
+        <!-- The Long Letter Pane -->
+        <div class="letter-container" id="letterContainer">
+            <div class="letter-content">
+                <h2>Querida Hemy,</h2>
+                
+                <p>
+                    No sé por dónde empezar, y eso que podría pasarme toda una vida hablándote de ti sin llegar 
+                    siquiera a rozar la inmensidad de lo que siento. He buscado mil maneras de poner mi corazón en palabras, he imaginado 
+                    las frases más hermosas, he recorrido mentalmente todos los poemas de amor que conozco y todos, y aun así cada vez
+                    que pienso en ti, siento que el lenguaje se me queda pequeño. Qué ironía tan bonita, ¿no? Yo, que quisiera escribirte
+                    el poema más hermoso que haya existido jamás, descubriendo que ni todas las palabras del mundo serían suficientes para
+                    explicarte lo mucho que te amo.
+
+                    Y, sin embargo, aquí estoy, intentándolo. Porque si hay algo que mereces, es que nunca me canse de recordarte
+                    lo extraordinaria que eres para mí.
+                </p>
+
+                <p>
+                    <em>A veces me pregunto qué habría sido de mi vida si nuestros caminos jamás se hubieran cruzado. Qué canciones 
+                    habría escuchado sin pensar en ti, qué atardeceres habría contemplado sin desear tenerte a mi lado, qué estrellas 
+                    habría mirado sin imaginar que alguna de ellas podría competir con el brillo de tus ojos. Me pregunto cuántas 
+                    pequeñas cosas habrían pasado desapercibidas si tú no hubieras llegado a mi vida para darles un significado nuevo. 
+                    Y entonces me doy cuenta de que, aunque seguramente habría seguido viviendo, estudiando, riendo y caminando por este mundo, 
+                    habría algo que me faltaría sin que yo siquiera supiera cómo nombrarlo. 
+
+                    Porque llegaste tú, y de alguna manera, el mundo siguió siendo el mismo, pero yo comencé a verlo de otra manera.</em>
+                </p>
+
+                <p>
+                    <em>El cielo no cambió de color, las flores no comenzaron a crecer más deprisa y las estrellas no se acercaron a la Tierra.
+                    Sin embargo, todo adquirió una belleza distinta. Las canciones comenzaron a tener tu nombre escondido entre sus versos. 
+                    Los días ordinarios empezaron a guardar la posibilidad de convertirse en recuerdos extraordinarios. Y los pequeños detalles, 
+                    esos que antes podían parecer insignificantes, comenzaron a recordarme que la felicidad no siempre llega haciendo ruido; 
+                    a veces llega en forma de un mensaje tuyo, de una conversación contigo, de tu risa, de una mirada o de esa sensación 
+                    tan inexplicable de saber que existes y que tengo la inmensa fortuna de amarte.</em>
+                </p>
+
+                <p>
+                    <em>Y dime, mi vida, ¿cómo se supone que uno debe actuar con normalidad después de encontrar a alguien que convierte hasta
+                    los pensamientos más sencillos en pequeñas historias de amor? ¿Cómo voy a mirar la luna sin imaginarme compartiéndola contigo? 
+                    ¿Cómo voy a escuchar una canción romántica sin pensar que quisiera dedicártela? ¿Cómo voy a pasar frente a una flor bonita sin 
+                    preguntarme si te gustaría recibirla? ¿Y cómo voy a escribir sobre el amor sin terminar escribiendo sobre ti?
+
+                    Creo que ya no puedo. Y, sinceramente, tampoco quiero</em>
+                </p>
+
+                <p>
+                    <em>Antes de ti, podía imaginar el amor como algo hermoso. Podía leer novelas, escuchar canciones, escribir poemas y soñar
+                    con esa clase de cariño que parece sacado de otra época, de esos en los que alguien escribe cartas a mano, guarda flores 
+                    entre las páginas de un libro y recuerda detalles que el resto del mundo considera insignificantes. Pero una cosa es imaginar 
+                    el amor y otra muy distinta es encontrar a alguien que te haga querer vivirlo de verdad. 
+
+                    Pero, sobre todo, quiero lo cotidiano</em>
+                </p>
+                    
+                <p>
+                <em>Quiero los días en los que no tengamos absolutamente nada extraordinario que contar, pero aun así queramos contárnoslo todo. 
+                    Quiero las conversaciones que comienzan con una tontería y terminan llevándonos a hablar de nuestros sueños, nuestros miedos 
+                    y todas esas cosas que escondemos del resto del mundo. Quiero las risas que nos dejan sin aire, los chistes malos que solamente 
+                    nosotros encontramos graciosos y las miradas que dicen más que cualquier conversación. Quiero verte emocionarte por algo que amas y 
+                    escucharte hablar durante horas, aunque no sepa nada del tema, porque aprender las pequeñas cosas que te hacen feliz también es una 
+                    forma de conocerte.</em>
+
+                </p>
+
+                <p>
+                    <em>Quiero cocinar contigo y que, si el postre sale horrible, terminemos riéndonos mientras intentamos salvarlo. Quiero compartir 
+                    contigo una manta, una película que probablemente dejaremos de ver porque nos distraeremos hablando, y tardes enteras en las que el 
+                    único plan sea estar juntos. Quiero caminar a tu lado cuando haga frío, prestarte mi abrigo aunque después me arrepienta un poquito 
+                    de congelarme y fingir que no me importa cuando me robes todo el espacio de la cama.<em>
+                </p>
+
+                <p>
+                    <em>No espero que seas perfecta, mi vida. Ni siquiera quiero que sientas que tienes que serlo conmigo.
+                        
+                    No tienes que tener siempre las palabras correctas, ni estar de buen humor todos los días, ni esconder tus lágrimas para parecer fuerte. 
+                    No tienes que convertirte en una versión distinta de ti misma para merecer mi cariño. Quiero que puedas ser tú, 
+                    con todo lo que eso significa: con tus días buenos y malos, con tus certezas y contradicciones, con tus sueños enormes y tus pequeñas 
+                    preocupaciones. Quiero que puedas respirar tranquila a mi lado, que no sientas que debes ganarte constantemente un lugar en mi corazón, 
+                    porque el amor que quiero darte no debería sentirse como un examen que tienes que aprobar.</em>
+                </p>
+
+                <p>
+                    <em>Sé que hemos peleado, y no me gusta, por eso. Quiero aprender a quererte de la manera en que tú necesitas ser querida. 
+                        Quiero escucharte de verdad, incluso cuando no encuentre una solución para lo que te duele. Quiero aprender a reconocer 
+                        cuándo necesitas un consejo y cuándo simplemente necesitas que te abrace y te recuerde que no tienes que enfrentarte a todo sola. 
+                        Quiero celebrar tus victorias sin compararlas con las de nadie, acompañarte en tus tropiezos sin hacerte sentir menos y recordarte 
+                        lo capaz que eres cuando tú misma tengas dificultades para verlo.</em>
+                </p>
+
+                <p>
+                    <em>Y, cuando nos equivoquemos (porque somos humanos, porque tendremos días complicados y porque amarnos no significa saber hacerlo todo bien), 
+                    quiero que tengamos la valentía de hablar, de escucharnos, de pedir perdón cuando corresponda y de cambiar aquello que nos haga daño. 
+                    No quiero un amor que solamente sea bonito cuando todo marcha perfectamente. Quiero un amor que también sepa ser paciente, honesto y responsable. 
+                    Un amor que no confunda los celos con la pasión, el control con el cuidado ni el sufrimiento con la profundidad de los sentimientos.</em>
+                </p>
+
+                <p>
+                    <em>Te amo por quien eres, por lo que compartimos y por todo lo bonito que todavía podemos construir. Te amo con la esperanza de quien sueña despierto,
+                    con la ternura de quien sostiene algo valioso entre las manos y con la humildad de quien sabe que el amor más hermoso no es el que se promete de la 
+                    manera más grandiosa, sino el que se demuestra, día tras día, con pequeños actos de cariño.
+                
+                    Y si la vida me concede el tiempo suficiente, mi amor, quisiera pasar una buena parte de él demostrándote que estas palabras no fueron solamente un instante de inspiración.</em>
+                </p>
+
+                <p>
+                    <em>Así que, mi niña bonita, si alguna vez el mundo se vuelve demasiado ruidoso, si los días pasan demasiado rápido o si la vida nos hace olvidar por un instante lo afortunados 
+                    que somos de poder compartir este pedacito de existencia, recuerda esto:
+
+                    En algún lugar de este mundo hay una persona que sonríe al pensar en ti. Una persona que encuentra poesía en tu existencia, que quisiera regalarte flores sin esperar una ocasión 
+                    especial y que cree que el amor no debería quedarse solamente en las palabras bonitas, sino convertirse en una forma de tratarte, de escucharte y de acompañarte.
+
+                    Esa persona soy yo.</em>
+                </p>
+
+                <p>
+                    <em>Perdóname por ser tan cursi, mi amor. Aunque, pensándolo bien, no me perdones nada. Déjame serlo. Déjame escribirte cosas que harían suspirar a los 
+                        protagonistas de una novela de Jane Austen. Déjame dedicarte canciones, inventar apodos ridículos, guardar recuerdos pequeños y emocionarme por fechas 
+                        que para el resto del mundo no significan nada. Déjame mirarte como si fueras la última página de mi libro favorito, aun sabiendo que lo que más deseo 
+                        es que nuestra historia tenga muchísimas páginas por delante.</em>
+                </p>
+
+                <p>
+                    Te amo más que ayer, pero menos que mañana. Ya que te amo de acá a la luna ida y vuelta a pasos de tortuga. Muah
+                </p>
+
+                <div class="signature">
+                    Con todo mi corazón y siempre tuyo,<br>
+                    Zhi Qian 🛫 🌙 🔁 🐢
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openLetter() {
+            const wrapper = document.getElementById('appWrapper');
+            const titleText = document.getElementById('titleText');
+
+            // Switch views smoothly
+            wrapper.classList.add('open');
+            titleText.innerText = "Dummy :p";
+        }
+    </script>
+</body>
+</html>

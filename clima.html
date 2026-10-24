@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro conector meteorológico ☀️🌧️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center p-4 text-white">
+
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl p-8 max-w-xl w-full text-center">
+        <h1 class="text-3xl font-bold mb-2">La distancia significa tan poco... 💕</h1>
+        <p class="text-white/80 mb-8 text-sm">No sé qué decir, te amo mucho muah</p>
+
+        <!-- Cities Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            
+            <!-- Your City Card -->
+            <div class="bg-white/20 rounded-2xl p-6 shadow-inner border border-white/10">
+                <h2 class="text-xl font-semibold mb-1 text-pink-200">Mi Ciudad</h2>
+                <input type="text" id="city1-input" value="New York" class="w-full bg-black/20 text-center rounded-lg py-1 px-2 mb-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-pink-300">
+                <div id="city1-data">
+                    <div class="text-4xl mb-2" id="city1-icon">⏳</div>
+                    <div class="text-3xl font-bold mb-1" id="city1-temp">--°C</div>
+                    <div class="text-sm capitalize text-white/80" id="city1-desc">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- Her City Card -->
+            <div class="bg-white/20 rounded-2xl p-6 shadow-inner border border-white/10">
+                <h2 class="text-xl font-semibold mb-1 text-pink-200">Tu Ciudad</h2>
+                <input type="text" id="city2-input" value="London" class="w-full bg-black/20 text-center rounded-lg py-1 px-2 mb-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-pink-300">
+                <div id="city2-data">
+                    <div class="text-4xl mb-2" id="city2-icon">⏳</div>
+                    <div class="text-3xl font-bold mb-1" id="city2-temp">--°C</div>
+                    <div class="text-sm capitalize text-white/80" id="city2-desc">Cargando...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <button onclick="fetchAllWeather()" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg transition transform hover:scale-105">
+            Actualizar clima ✨
+        </button>
+        <p id="distance-note" class="text-xs text-white/60 mt-6">Tip: Puedes buscar cualquier ciudad :D!</p>
+    </div>
+
+    <script>
+        // Using Open-Meteo API (completely free, requires no API key!)
+        async function fetchWeatherForCity(cityName, tempElementId, descElementId, iconElementId) {
+            try {
+                // 1. Get coordinates for the city name using Open-Meteo's geocoding API
+                const geoRes = await axios.get(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1`);
+                if (!geoRes.data.results || geoRes.data.results.length === 0) {
+                    document.getElementById(descElementId).innerText = "City not found";
+                    return;
+                }
+                const { latitude, longitude, name, country } = geoRes.data.results[0];
+
+                // 2. Get current weather data using coordinates
+                const weatherRes = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+                const weather = weatherRes.data.current_weather;
+
+                document.getElementById(tempElementId).innerText = `${weather.temperature}°C`;
+                
+                // Map weather codes to simple descriptions and emojis
+                const { text, emoji } = getWeatherDetails(weather.weathercode);
+                document.getElementById(descElementId).innerText = `${name}, ${country} • ${text}`;
+                document.getElementById(iconElementId).innerText = emoji;
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById(descElementId).innerText = "Error loading weather";
+            }
+        }
+
+        function getWeatherDetails(code) {
+            // WMO Weather interpretation codes
+            const weatherMap = {
+                0: { text: "Clear sky", emoji: "☀️" },
+                1: { text: "Mainly clear", emoji: "🌤️" },
+                2: { text: "Partly cloudy", emoji: "⛅" },
+                3: { text: "Overcast", emoji: "☁️" },
+                45: { text: "Foggy", emoji: "🌫️" },
+                51: { text: "Light drizzle", emoji: "🌧️" },
+                61: { text: "Rain showers", emoji: "🌧️" },
+                71: { text: "Snowfall", emoji: "❄️" },
+                95: { text: "Thunderstorm", emoji: "⚡" }
+            };
+            return weatherMap[code] || { text: "Pleasant", emoji: "🌈" };
+        }
+
+        function fetchAllWeather() {
+            const city1 = document.getElementById('city1-input').value;
+            const city2 = document.getElementById('city2-input').value;
+
+            fetchWeatherForCity(city1, 'city1-temp', 'city1-desc', 'city1-icon');
+            fetchWeatherForCity(city2, 'city2-temp', 'city2-desc', 'city2-icon');
+        }
+
+        // Run on load
+        fetchAllWeather();
+    </script>
+</body>
+</html>
